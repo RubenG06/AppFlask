@@ -19,7 +19,7 @@ def enviar_datos(results):
 	for cosa in rows:
 		#print '\n\t'
 		#print cosa[0]
-		final = final + '<p>' + cosa[0] + '</p>'
+		final = final + '<p>' + cosa[0] + '  >>>  </p>'
 	return final
 
 def insert_datos(results):
@@ -36,8 +36,8 @@ def insert_datos(results):
 		nuevo = art.replace("'","")
 	
 		#print 'n\t'
-		#print("INSERT INTO info (titulo) VALUES ('"+nuevo+"');")
-		cur2.execute("INSERT INTO info (titulo) VALUES ('"+nuevo+"');")
+		print("INSERT INTO info (titulo, fecha) VALUES ('"+nuevo+"', '"+ time.strftime("%d/%m/%y") +"');")
+		cur2.execute("INSERT INTO info (titulo, fecha) VALUES ('"+nuevo+"', '"+ time.strftime("%d/%m/%y") +"');")
 	
 	
 	con.commit()
