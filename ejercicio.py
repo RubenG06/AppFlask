@@ -15,11 +15,19 @@ def enviar_datos(results):
 	cur3.execute("SELECT * FROM info")
 	rows=cur3.fetchall()
 	#print rows
-	final = '<h1>NOTICIAS ENCONTRADAS: </h1>'
+	final = '<h1>NOTICIAS ENCONTRADAS: </h1><table style="width:100%">'
 	for cosa in rows:
+		final = final + '<tr>'
 		#print '\n\t'
 		#print cosa[0]
-		final = final + '<p>' + cosa[0] + '  >>>  </p>'
+		dt = cosa[3]
+		salida = '{0.month}/{0.day}/{0.year}'.format(dt)
+		
+		
+		final = final + '<th style="border: 1px solid black; border-collapse: collapse;">' + cosa[0] + '</th><th style="border: 1px solid black; border-collapse: collapse;">' +salida+ '<th>'
+		final = final + '</tr>'
+		
+	final = final + '</table>'
 	return final
 
 def insert_datos(results):
@@ -36,7 +44,7 @@ def insert_datos(results):
 		nuevo = art.replace("'","")
 	
 		#print 'n\t'
-		print("INSERT INTO info (titulo, fecha) VALUES ('"+nuevo+"', '"+ time.strftime("%d/%m/%y") +"');")
+		#print("INSERT INTO info (titulo, fecha) VALUES ('"+nuevo+"', '"+ time.strftime("%d/%m/%y") +"');")
 		cur2.execute("INSERT INTO info (titulo, fecha) VALUES ('"+nuevo+"', '"+ time.strftime("%d/%m/%y") +"');")
 	
 	
