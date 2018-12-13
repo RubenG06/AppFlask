@@ -22,10 +22,11 @@ def enviar_datos(results):
 		#print '\n\t'
 		#print cosa[0]
 		dt = cosa[3] 		# El dia el mes y el anno
-		fecha = cosa[4]		# La hora que se ha realizado la insercion
+		hora = cosa[4]		# La hora que se ha realizado la insercion
 		salida = '{0.month}/{0.day}/{0.year}'.format(dt)
-		print fecha
-		final = final + '<th style="border: 1px solid black; border-collapse: collapse;">' + cosa[0] + '</th><th style="border: 1px solid black; border-collapse: collapse;">' +salida+ '<th><th style="border: 1px solid black; border-collapse: collapse;">' +''+ '<th>'
+		salida2 = str(hora)
+		print salida2
+		final = final + '<th style="border: 1px solid black; border-collapse: collapse;">' + cosa[0] + '</th><th style="border: 1px solid black; border-collapse: collapse;">' +salida+ '<th><th style="border: 1px solid black; border-collapse: collapse;">' +salida2+ '<th>'
 		final = final + '</tr>'
 		
 	final = final + '</table>'
