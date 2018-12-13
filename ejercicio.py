@@ -1,6 +1,7 @@
 import requests, psycopg2, sys, psycopg2.extras, re, time
 from lxml import html
 from flask import Flask, render_template, request, redirect
+from datetime import datetime
 
 
 DSN = "dbname=tsr user=lab"
@@ -20,9 +21,11 @@ def enviar_datos(results):
 		final = final + '<tr>'
 		#print '\n\t'
 		#print cosa[0]
-		dt = cosa[3]
+		dt = cosa[3] 		# El dia el mes y el anno
+		fecha = cosa[4]		# La hora que se ha realizado la insercion
 		salida = '{0.month}/{0.day}/{0.year}'.format(dt)
-		final = final + '<th style="border: 1px solid black; border-collapse: collapse;">' + cosa[0] + '</th><th style="border: 1px solid black; border-collapse: collapse;">' +salida+ '<th>'
+		print fecha
+		final = final + '<th style="border: 1px solid black; border-collapse: collapse;">' + cosa[0] + '</th><th style="border: 1px solid black; border-collapse: collapse;">' +salida+ '<th><th style="border: 1px solid black; border-collapse: collapse;">' +''+ '<th>'
 		final = final + '</tr>'
 		
 	final = final + '</table>'
@@ -35,15 +38,16 @@ def insert_datos(results):
 	con = psycopg2.connect(DSN)
 	cur = con.cursor()
 	cur2 = con.cursor()
-	#cur.execute("Delete from info")
-	#cur.execute( "CREATE TABLE public.info ( titulo text COLLATE pg_catalog.\"default\", meneos integer, click integer, fecha date ) WITH ( OIDS = FALSE ) TABLESPACE pg_default; ALTER TABLE public.info     OWNER to postgres;")
+	# Si se quiere reiniciar los contenidos de la base de datos 
+	#cur.execute("DROP TABLE info")
+	#cur.execute( "CREATE TABLE public.info ( titulo text COLLATE pg_catalog.\"default\", meneos integer, click integer, fecha date, hora reltime ) WITH ( OIDS = FALSE ) TABLESPACE pg_default; ALTER TABLE public.info     OWNER to postgres;")
 	
 	
 	nuevo = resu.replace("'","")
 	
-		#print 'n\t'
-		#print("INSERT INTO info (titulo, fecha) VALUES ('"+nuevo+"', '"+ time.strftime("%d/%m/%y") +"');")
-	cur2.execute("INSERT INTO info (titulo, fecha) VALUES ('"+nuevo+"', '"+ time.strftime("%d/%m/%y") +"');")
+	#print 'n\t'
+	print("INSERT INTO info (titulo, fecha, hora) VALUES ('"+nuevo+"', '"+ time.strftime("%m/%d/%y") +"', ' "+time.strftime("%H:%M:%S") +"');")
+	cur2.execute("INSERT INTO info (titulo, fecha, hora) VALUES ('"+nuevo+"', '"+ time.strftime("%m/%d/%y") +"', ' "+time.strftime("%H:%M:%S") +"');")
 	
 	
 	con.commit()
@@ -59,7 +63,7 @@ def download(url):
     return r
 
 
-	
+	 
 @app.route('/')
 def my_form():
 	url = "http://www.meneame.net"
