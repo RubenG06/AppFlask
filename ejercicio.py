@@ -94,8 +94,7 @@ def download(url):
 
     return r
 
-
-	 
+	
 @app.route('/')
 def my_form():
 	url = "http://www.meneame.net"
@@ -112,6 +111,8 @@ def my_form():
 	insert_datos(results)
 	#return '\n\t'.join(results)
 	return enviar_datos(results)
+	
+
 	
 if __name__ == "__main__":
 	app.run(host='0.0.0.0') 
