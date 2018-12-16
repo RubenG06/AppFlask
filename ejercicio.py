@@ -91,7 +91,6 @@ def download(url):
     if r.status_code != 200:
         sys.stderr.write("! Error {} retrieving url {}".format(r.status_code, url))
         return None
-
     return r
 
 	
@@ -100,14 +99,11 @@ def my_form():
 	url = "http://www.meneame.net"
 	page = download(url)
 	
-	
-	
 	if page:
 		tree = html.fromstring(page.content)
 		xpath_string = '//h2/a/text()'
         results = tree.xpath(xpath_string)
 		
-	
 	insert_datos(results)
 	#return '\n\t'.join(results)
 	return enviar_datos(results)
