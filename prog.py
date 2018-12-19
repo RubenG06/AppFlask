@@ -22,8 +22,8 @@ def my_form_post():
 	cur3.execute("SELECT * FROM info WHERE click > "+text+" ORDER BY fecha DESC FETCH FIRST 10 ROWS ONLY ;")
 	rows=cur3.fetchall()
 	
-	final = '<h1>NOTICIAS ENCONTRADAS: </h1><table style="width:100%">'
-	final = final + '<tr>' + '<th style="border: 1px solid black; border-collapse: collapse;">' + 'TITULO' + '</th><th style="border: 1px solid black; border-collapse: collapse;">' +'FECHA OBTENCION'+ '<th><th style="border: 1px solid black; border-collapse: collapse;">' + 'HORA OBTENCION' + '<th><th style="border: 1px solid black; border-collapse: collapse;">' + 'CLICKs' + '</th>'+ '<th style="border: 1px solid black; border-collapse: collapse;">' + 'MENEOS' + '</th>' + '</tr>'
+	final = '<h2>NOTICIAS FILTRADAS por clics: </h2><table style="width:100%">'
+	final = final + '<tr>' + '<th style="border: 1px solid blue; border-collapse: collapse;">' + 'TITULO' + '</th><th style="border: 1px solid blue; border-collapse: collapse;">' +'FECHA OBTENCION'+ '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + 'HORA OBTENCION' + '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + 'CLICKs' + '</th>'+ '<th style="border: 1px solid blue; border-collapse: collapse;">' + 'MENEOS' + '</th>' + '</tr>'
 	for cosa in rows:
 		final = final + '<tr>'
 		#print '\n\t'
@@ -35,7 +35,7 @@ def my_form_post():
 		salida = '{0.month}/{0.day}/{0.year}'.format(dt)
 		salida2 = str(hora)
 		#print salida2
-		final = final + '<th style="border: 1px solid black; border-collapse: collapse;">' + cosa[0] + '</th><th style="border: 1px solid black; border-collapse: collapse;">' +salida+ '<th><th style="border: 1px solid black; border-collapse: collapse;">' +salida2+ '<th><th style="border: 1px solid black; border-collapse: collapse;">' + clic + '</th>'+ '<th style="border: 1px solid black; border-collapse: collapse;">' + meneos + '</th>'
+		final = final + '<th style="border: 1px solid blue; border-collapse: collapse;">' + cosa[0] + '</th><th style="border: 1px solid blue; border-collapse: collapse;">' +salida+ '<th><th style="border: 1px solid blue; border-collapse: collapse;">' +salida2+ '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + clic + '</th>'+ '<th style="border: 1px solid blue; border-collapse: collapse;">' + meneos + '</th>'
 		final = final + '</tr>'
 		
 	final = final + '</table>'
