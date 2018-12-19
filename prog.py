@@ -16,10 +16,12 @@ def my_form():
 def my_form_post():
 	text = request.form['text'] #Obtengo el parametro
 	print 'Buscando por ' + text
+	num_bus = int(text)
 	
 	con = psycopg2.connect(DSN)
 	cur3 = con.cursor()
-	cur3.execute("SELECT * FROM info WHERE click > "+text+" ORDER BY fecha DESC FETCH FIRST 10 ROWS ONLY ;")
+	print num_bus
+	cur3.execute("SELECT * FROM info WHERE click > "+ str(num_bus) +" ORDER BY fecha DESC FETCH FIRST 10 ROWS ONLY ;")
 	rows=cur3.fetchall()
 	
 	final = '<h2>NOTICIAS FILTRADAS por clics: </h2><table style="width:100%">'
