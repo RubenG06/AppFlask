@@ -105,7 +105,6 @@ def my_form():
         results = tree.xpath(xpath_string)
 		
 	insert_datos(results)
-	#return '\n\t'.join(results)
 	return enviar_datos(results)
 	
 

@@ -3,6 +3,7 @@ from lxml import html
 from flask import Flask, render_template, request, redirect
 from datetime import datetime
 
+# Informacion de la base de datos y flask 
 
 DSN = "dbname=tsr user=lab"
 
@@ -12,16 +13,14 @@ app = Flask(__name__)
 def enviar_datos(results):
 	con = psycopg2.connect(DSN)
 	cur3 = con.cursor()
-	#print '\n\n\t>>>>>>>> Los datos que hay finalmente almacenado \n'
-	cur3.execute("SELECT * FROM info")
+	#Consultamos los datos
+	cur3.execute("SELECT * FROM info ORDER BY fecha, hora DESC")
 	rows=cur3.fetchall()
-	#print rows
+	#Imprimimos los datos 
 	final = '<h1>NOTICIAS ENCONTRADAS: </h1><table style="width:100%">'
-	final = final + '<tr>' + '<th style="border: 1px double blue; border-collapse: collapse;">' + 'TITULO' + '</th><th style="border: 1px solid blue; border-collapse: collapse;">' +'FECHA OBTENCION'+ '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + 'HORA OBTENCION' + '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + 'CLICKs' + '</th>'+ '<th style="border: 1px solid blue; border-collapse: collapse;">' + 'MENEOS' + '</th>' + '</tr>'
+	final = final + '<tr style="background-color: orange;">' + '<th style="border: 1px double blue; border-collapse: collapse;">' + 'TITULO' + '</th><th style="border: 1px solid blue; border-collapse: collapse;">' +'FECHA OBTENCION'+ '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + 'HORA OBTENCION' + '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + 'CLICKs' + '</th>'+ '<th style="border: 1px solid blue; border-collapse: collapse;">' + 'MENEOS' + '</th>' + '</tr>'
 	for cosa in rows:
-		final = final + '<tr>'
-		#print '\n\t'
-		#print cosa[0]
+		final = final + '<tr style="background-color: Aquamarine;">'
 		dt = cosa[3] 		# El dia el mes y el anno
 		hora = cosa[4]		# La hora que se ha realizado la insercion
 		meneos = str(cosa[1])
@@ -29,7 +28,6 @@ def enviar_datos(results):
 		#salida = '{0.month}/{0.day}/{0.year}'.format(dt)
 		salida = str(dt)
 		salida2 = str(hora)
-		#print salida2
 		final = final + '<th style="border: 1px double blue; border-collapse: collapse;"><h3>' + cosa[0] + '</h3></th><th style="border: 1px double blue; border-collapse: collapse;">' +salida+ '<th><th style="border: 1px solid blue; border-collapse: collapse;">' +salida2+ '<th><th style="border: 1px solid blue; border-collapse: collapse;">' + clic + '</th>'+ '<th style="border: 1px solid blue; border-collapse: collapse;">' + meneos + '</th>'
 		final = final + '</tr>'
 		
@@ -43,13 +41,13 @@ def gethtml():
 
 def insert_datos(results, r_c, r_m):
 
+	# Obtenemos el titulo con el numero de clics y meneos 
 	cl = r_c[0]
 	
+	# eliminamos parte de la etiqueta 
 	nuevo_c = cl.replace(" clics","")
 	clic = int(nuevo_c)
-	print clic
 	meneos = int(r_m[0])
-	print meneos
 
 	resu = results[0]
  
@@ -61,15 +59,13 @@ def insert_datos(results, r_c, r_m):
 	#cur.execute("DROP TABLE info")
 	#cur.execute( "CREATE TABLE public.info ( titulo text COLLATE pg_catalog.\"default\", meneos integer, click integer, fecha date, hora reltime ) WITH ( OIDS = FALSE ) TABLESPACE pg_default; ALTER TABLE public.info     OWNER to postgres;")
 	
-	
+	# Eliminamos las comillas simples para que no de problemas el programa 
 	nuevo = resu.replace("'","")
 	
-	print 'PASO POR AQUUIIIIIIIIIIIIIIIIIIIIIIIIII'
+	# Obtenemos las fechas en el formato correcto
 	f = time.strftime("%m/%d/%y")
 	h = time.strftime("%H:%M:%S")
-	#print 'n\t'
-	#print "INSERT INTO info (titulo, fecha, hora, click, meneos) VALUES ('"+nuevo+"', '"+ time.strftime("%m/%d/%y") +"', ' "+time.strftime("%H:%M:%S") +"' , "+clic+" ," + meneos+ " );"
-	
+	#Ejecutamos la consulta 
 	query = 'insert into info (titulo, meneos, click, fecha, hora) values (\'%s\',%d, %d, \'%s\', \'%s\' );' % (nuevo, clic,meneos, f, h)
 	cur2.execute(query)
 	
@@ -93,7 +89,7 @@ def my_form():
 	url = "http://www.meneame.net"
 	page = download(url)
 	
-	
+	#Obtenemos la informacion y filtramos lo que deseemos con xpath y xquery
 	
 	if page:
 		tree = html.fromstring(page.content) 
@@ -106,7 +102,6 @@ def my_form():
 		
 	
 	insert_datos(results, r_c, r_m)
-	#return '\n\t'.join(results)
 	return enviar_datos(results)
 	
 
